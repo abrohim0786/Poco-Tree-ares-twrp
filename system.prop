@@ -3,6 +3,9 @@ ro.postinstall.fstab.prefix=/system
 ro.crypto.volume.filenames_mode=aes-256-cts
 ro.sys.usb.storage.type=mtp
 
+# Dynamic partitions
+ro.boot.dynamic_partitions=true
+
 # Basic properties
 ro.twrp.build=1
 ro.hardware.keystore=mt6893  # Hardcoded platform name
