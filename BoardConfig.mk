@@ -134,3 +134,31 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 
 # Treble
 BOARD_VNDK_VERSION := current
+
+# FastbootD
+TW_INCLUDE_FASTBOOTD := true
+
+# ensure device-mapper and crypto helpers available in recovery
+TARGET_RECOVERY_DEVICE_MODULES += dm-mod
+TARGET_RECOVERY_DEVICE_MODULES += dm-crypt
+TARGET_RECOVERY_DEVICE_MODULES += crypto_user
+
+# include user-space libs (must exist in your tree or be added as prebuilts)
+TARGET_RECOVERY_DEVICE_MODULES += libcryptfs
+TARGET_RECOVERY_DEVICE_MODULES += libfbe
+TARGET_RECOVERY_DEVICE_MODULES += libkeymaster4
+TARGET_RECOVERY_DEVICE_MODULES += libpuresoftkeymasterdevice
+
+# Exclude stock fstab to prevent conflicting mount flags
+TARGET_RECOVERY_EXCLUDE_ADDITIONAL_FSTAB := true
+
+# Kernel modules for storage and encryption
+TARGET_RECOVERY_DEVICE_MODULES += \
+    dm_mod.ko \
+    f2fs.ko \
+    mtd_blkdevs.ko \
+    mtk_sd.ko \
+    scsi_mod.ko \
+    ufs.ko
+
+TW_LOAD_VENDOR_MODULES := "dm_mod.ko f2fs.ko mtd_blkdevs.ko mtk_sd.ko scsi_mod.ko ufs.ko"
