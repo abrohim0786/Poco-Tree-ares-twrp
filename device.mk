@@ -93,20 +93,16 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_MTP_DEVICE := /dev/mtp_usb
 TW_INCLUDE_NTFS_3G := true
-TW_OZIP_DECRYPT_KEY := 1C4C1EA3A12531AE491B21BB31613C11
 
 # Logging and Debugging
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
 TW_EXCLUDE_TWRPAPP := true
-TWRP_LOGSTATUS := true
 
 # System Tools
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_EXCLUDE_APEX := true
-#TW_Y_OFFSET := 115
-#TW_H_OFFSET := -115
 TARGET_USES_MKE2FS := true
 USE_RECOVERY_INSTALLER := true
 RECOVERY_INSTALLER_PATH := $(DEVICE_PATH)/installer
@@ -128,12 +124,7 @@ BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 # Override Recovery Tools
 PRODUCT_HOST_PACKAGES += \
-    pigz \
-    e2fsck \
-    fsck.f2fs \
-    mkfs.f2fs
-
+    pigz
+    
 # Maintainer Info
 TW_DEVICE_VERSION := by- aBr0him
-
-TW_INCLUDE_LPTOOLS := true
