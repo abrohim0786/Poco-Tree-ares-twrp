@@ -1,19 +1,29 @@
-# TWRP Configuration Flags
-# Minimal setup for stable recovery boot
+# <mount>             <type>    <path>                               <mnt_flags and options>
 
-# Essential Boot Partitions
-/boot          emmc    /dev/block/by-name/boot        flags=slotselect;display="Boot";backup=1;flashimg=1
-/dtbo          emmc    /dev/block/by-name/dtbo        flags=slotselect;display="Dtbo";backup=1;flashimg=1
+/storage              f2fs      /data/media/0                        flags=display="Internal Storage";bind;backup=1;removable
+/boot                 emmc      /dev/block/by-name/boot              flags=display="Boot";slotselect;flashimg=1;backup=1
+/logo                 emmc      /dev/block/by-name/logo              flags=display="Logo";slotselect;flashimg=1;backup=1
+/dtbo                 emmc      /dev/block/by-name/dtbo              flags=display="DTBO";slotselect;flashimg=1;backup=1
+/vbmeta               emmc      /dev/block/by-name/vbmeta            flags=display="VBMeta";slotselect;flashimg=1;backup=1
+/vbmeta_vendor        emmc      /dev/block/by-name/vbmeta_vendor     flags=display="VBMeta Vendor";slotselect;flashimg=1;backup=1
+/vbmeta_system        emmc      /dev/block/by-name/vbmeta_system     flags=display="VBMeta System";slotselect;flashimg=1;backup=1
+/vendor_boot          emmc      /dev/block/by-name/vendor_boot       flags=display="Vendor_boot";slotselect
 
-# Persistent Storage
-/persist       ext4    /dev/block/by-name/persist     flags=display="Persist";backup=1
+# Removable storage
+/usb-otg              vfat      /dev/block/sda1                      /dev/block/sda      flags=display="USB-OTG";storage;wipeingui;removable;fs=exfat,vfat,ext4
 
-# Firmware (Consolidated)
-/firmware      emmc    /dev/block/by-name/audio_dsp   flags=display="Firmware";backup=1
+# IMEI and modem related partitions (non-ext4)
+/nvram                emmc      /dev/block/by-name/nvram             flags=display="nvram";backup=1
+/proinfo              emmc      /dev/block/by-name/proinfo           flags=display="Proinfo";backup=1
+/persistent           emmc      /dev/block/by-name/frp               flags=display="Persistent";backup=1
+/sec1                 emmc      /dev/block/by-name/sec1              flags=display="Sec1";backup=1
+/flashinfo            emmc      /dev/block/by-name/flashinfo         flags=display="Flashinfo";backup=1
 
-# Data & Cache
-/data          auto    /dev/block/by-name/userdata    flags=display="Data";storage;canbewiped
-/cache         ext4    /dev/block/by-name/cache       flags=display="Cache";canbewiped
+# Added critical partitions
+/cache                ext4      /dev/block/by-name/cache             flags=check
+/metadata             ext4      /dev/block/by-name/metadata          flags=check
+/data                 f2fs      /dev/block/by-name/userdata          flags=fileencryption=aes-256-xts:aes-256-cts:v2;keydirectory=/metadata/vold/metadata_encryption
 
-# USB Storage
-/usb-otg       auto    /dev/block/sdd1                flags=display="USB-OTG";storage;removable;wipeingui
+userdata:encryptable=footer
+userdata:mountpoint=/data
+userdata:slotselect
