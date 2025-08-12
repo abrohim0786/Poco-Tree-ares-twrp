@@ -1,32 +1,43 @@
-# Android fstab file for TWRP Recovery
-# Simplified configuration - no encryption support
+# System and Dynamic Partitions
+/dev/block/mapper/system           /system         ext4    ro,barrier=1
+/dev/block/mapper/vendor           /vendor         ext4    ro,barrier=1
+/dev/block/mapper/product          /product        ext4    ro,barrier=1
+/dev/block/mapper/system_ext       /system_ext     ext4    ro,barrier=1
 
-# System Partitions (Logical/Super)
-/system        ext4    ro,barrier=1,noatime    wait,logical,first_stage_mount,slotselect
-/system_ext    ext4    ro,barrier=1,noatime    wait,logical,first_stage_mount,slotselect
-/product       ext4    ro,barrier=1,noatime    wait,logical,first_stage_mount,slotselect
-/vendor        ext4    ro,barrier=1,noatime    wait,logical,first_stage_mount,slotselect
-/odm           ext4    ro,barrier=1,noatime    wait,logical,first_stage_mount,slotselect
+# Data Partition (Encrypted)
+/dev/block/sdc75                   /data           f2fs    flags=encryptable=footer,is_emulated=1
 
-# Critical Partitions
-/boot          emmc    /dev/block/by-name/boot     flags=display="Boot";backup=1;flashimg=1;slotselect
-/dtbo          emmc    /dev/block/by-name/dtbo     flags=display="Dtbo";backup=1;flashimg=1;slotselect
+# Metadata (Key Directory)
+/dev/block/sdc13                   /metadata       ext4    flags=reserved
 
-# Data and Metadata
-/data          f2fs    /dev/block/by-name/userdata noatime,nosuid,nodev,noauto_da_alloc,fsync_mode=nobarrier  wait,check,formattable,length=-16384
-/metadata      ext4    /dev/block/by-name/metadata noatime,nosuid,nodev,discard                                wait,check,formattable
+# Misc & FRP
+/dev/block/sdc4                    /frp            ext4    defaults
+/dev/block/sdc2                    /para           ext4    defaults
+/dev/block/sdc38                   /proinfo        ext4    defaults
+/dev/block/sdc14                   /persist        ext4    defaults
 
-# Persistent
-/persist       ext4    /dev/block/by-name/persist  noatime,nosuid,nodev                                        wait,notrim
+# Boot Partitions (A/B slots)
+/dev/block/sdc32                   /boot_a         emmc    defaults
+/dev/block/sdc56                   /boot_b         emmc    defaults
+/dev/block/sdc33                   /vendor_boot_a  emmc    defaults
+/dev/block/sdc57                   /vendor_boot_b  emmc    defaults
+/dev/block/sdc34                   /dtbo_a         emmc    defaults
+/dev/block/sdc58                   /dtbo_b         emmc    defaults
 
-# Misc
-/misc          emmc    /dev/block/by-name/misc     defaults                                                    defaults
+# Recovery-Visible Extras
+/dev/block/sdc42                   /logo           emmc    defaults
+/dev/block/sdc76                   /flashinfo      emmc    defaults
+/dev/block/sdc73                   /cust           ext4    defaults
+/dev/block/sdc15                   /protect1       ext4    defaults
+/dev/block/sdc16                   /protect2       ext4    defaults
+/dev/block/sdc74                   /rescue         ext4    defaults
 
-# Cache
-/cache         ext4    /dev/block/by-name/cache    noatime,nosuid,nodev,discard                                wait,formattable
+# Backup Partitions
+/dev/block/sdc68                   /backup1        ext4    defaults
+/dev/block/sdc69                   /backup2        ext4    defaults
+/dev/block/sdc70                   /backup3        ext4    defaults
+/dev/block/sdc71                   /backup4        ext4    defaults
+/dev/block/sdc72                   /backup5        ext4    defaults
 
-# USB OTG
-/usb-otg       auto    /dev/block/sdd1             defaults                                                    voldmanaged=usb:auto
-
-# Fallback for super devices
-super          emmc    /dev/block/by-name/super     defaults                                                    recoveryonly
+# USB-OTG (Allow auto format detection)
+/dev/block/sdX                     /usb-otg        auto    defaults
