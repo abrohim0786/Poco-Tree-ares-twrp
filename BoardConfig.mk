@@ -63,9 +63,6 @@ BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 BOARD_KERNEL_IMAGE_NAME := kernel
 
-# Rebuild kernel with:
-TARGET_KERNEL_CONFIG := ares_defconfig
-
 # AVB
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
@@ -151,14 +148,3 @@ TARGET_RECOVERY_DEVICE_MODULES += libpuresoftkeymasterdevice
 
 # Exclude stock fstab to prevent conflicting mount flags
 TARGET_RECOVERY_EXCLUDE_ADDITIONAL_FSTAB := true
-
-# Kernel modules for storage and encryption
-TARGET_RECOVERY_DEVICE_MODULES += \
-    dm_mod.ko \
-    f2fs.ko \
-    mtd_blkdevs.ko \
-    mtk_sd.ko \
-    scsi_mod.ko \
-    ufs.ko
-
-TW_LOAD_VENDOR_MODULES := "dm_mod.ko f2fs.ko mtd_blkdevs.ko mtk_sd.ko scsi_mod.ko ufs.ko"
