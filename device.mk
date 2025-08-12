@@ -62,50 +62,78 @@ PRODUCT_PACKAGES += \
     libpuresoftkeymasterdevice \
     libkeymaster4support
 
-# TWRP specific build flags
-TW_SCREEN_BLANK_ON_BOOT := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
-TW_USE_TOOLBOX := true
-TW_EXCLUDE_TWRPAPP := true
+RECOVERY_LIBRARY_SOURCE_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libcryptfs.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libfbe.so
+
+# TWRP Crypto Configuration (FIXED)
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := false
+TW_PREPARE_DATA_MEDIA_EARLY := true
+TW_USE_FSCRYPT_POLICY := 1
+
+BOARD_USES_METADATA_PARTITION := true
+
+# TWRP UI Configuration
 TW_THEME := portrait_hdpi
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
+DEVICE_RESOLUTION := 1080x1920
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.usb0/lun.%d/file
-TW_INCLUDE_RESETPROP := true
-TW_INCLUDE_REPACKTOOLS := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_USES_LOGD := true
-TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_EXTRA_LANGUAGES := true
-TW_INCLUDE_NTFS_3G := true
 TW_MAX_BRIGHTNESS := 2047
 TW_DEFAULT_BRIGHTNESS := 1200
-TW_NO_HAPTICS := true
-TW_EXCLUDE_APEX := false  # Must be false for Android 12+
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_NO_SCREEN_BLANK := false
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_USE_TOOLBOX := true
+
+# Storage Configuration
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.usb0/lun.%d/file
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+TW_MTP_DEVICE := /dev/mtp_usb
+TW_INCLUDE_NTFS_3G := true
+TW_OZIP_DECRYPT_KEY := 1C4C1EA3A12531AE491B21BB31613C11
+
+# Logging and Debugging
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
+TW_EXCLUDE_TWRPAPP := true
+TWRP_LOGSTATUS := true
+
+# System Tools
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_EXCLUDE_APEX := true
+#TW_Y_OFFSET := 115
+#TW_H_OFFSET := -115
+TARGET_USES_MKE2FS := true
 USE_RECOVERY_INSTALLER := true
 RECOVERY_INSTALLER_PATH := $(DEVICE_PATH)/installer
 
-# StatusBar Customization
+# F2FS Support (Required for Data Partition)
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+
+# Status Bar Customization
 TW_STATUS_ICONS_ALIGN := center
-DEVICE_RESOLUTION := 1080x2400
 TW_CUSTOM_CPU_POS := "300"
 TW_CUSTOM_CLOCK_POS := "70"
 TW_CUSTOM_BATTERY_POS := "790"
 TW_BATTERY_SYSFS_WAIT_SECONDS := 6
-TARGET_USES_MKE2FS := true
 
-# Crypto (DISABLED to fix boot loop)
-TW_INCLUDE_CRYPTO := false
-TW_INCLUDE_CRYPTO_FBE := false
-TW_INCLUDE_FBE_METADATA_DECRYPT := false
-
-# Maintainer and Branding
-TW_DEVICE_VERSION := by AbRoHim
-TW_OF_MAINTAINER := "AbRoHim"
-
-# SELinux policies
+# SELinux Policies
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
-# Override recovery modules
+# Override Recovery Tools
 PRODUCT_HOST_PACKAGES += \
-    pigz
+    pigz \
+    e2fsck \
+    fsck.f2fs \
+    mkfs.f2fs
+
+# Maintainer Info
+TW_DEVICE_VERSION := by- aBr0him
+
+TW_INCLUDE_LPTOOLS := true
