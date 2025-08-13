@@ -135,16 +135,5 @@ BOARD_VNDK_VERSION := current
 # FastbootD
 TW_INCLUDE_FASTBOOTD := true
 
-# ensure device-mapper and crypto helpers available in recovery
-TARGET_RECOVERY_DEVICE_MODULES += dm-mod
-TARGET_RECOVERY_DEVICE_MODULES += dm-crypt
-TARGET_RECOVERY_DEVICE_MODULES += crypto_user
-
-# include user-space libs (must exist in your tree or be added as prebuilts)
-TARGET_RECOVERY_DEVICE_MODULES += libcryptfs
-TARGET_RECOVERY_DEVICE_MODULES += libfbe
-TARGET_RECOVERY_DEVICE_MODULES += libkeymaster4
-TARGET_RECOVERY_DEVICE_MODULES += libpuresoftkeymasterdevice
-
 # Exclude stock fstab to prevent conflicting mount flags
 TARGET_RECOVERY_EXCLUDE_ADDITIONAL_FSTAB := true
